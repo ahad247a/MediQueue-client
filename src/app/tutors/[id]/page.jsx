@@ -9,27 +9,25 @@ export default function TutorDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   
-  // ফর্ম ইনপুট স্টেট
+  // 🔒 Better-Auth সেশন চেক
+  const { data: session, isPending: authLoading } = authClient.useSession();
+
+  // フォーム ইনপুট স্টেট (🌟 ফিক্স ১: সেশন থেকে সরাসরি ইনিশিয়াল ভ্যালু নেওয়া, যা ESLint এরর দূর করবে)
   const [studentName, setStudentName] = useState('');
   const [phone, setPhone] = useState('');
   const [bookingLoading, setBookingLoading] = useState(false);
 
   const router = useRouter();
   const { id } = useParams();
-  
-  // 🔒 Better-Auth সেশন চেক
-  const { data: session, isPending: authLoading } = authClient.useSession();
 
+  // 🔒 প্রাইভেট রুট প্রোটেকশন চেক (স্টেট সেট করা ছাড়া শুধু রিডাইরেক্ট)
   useEffect(() => {
     if (!authLoading && !session?.user) {
       router.push('/login');
-    } else if (session?.user) {
-      // সেশন থেকে ইউজারের নাম অটো-ফিল করা
-      setStudentName(session.user.name || '');
     }
   }, [session, authLoading, router]);
 
-  // 📡 এক্সপ্রেস সার্ভার থেকে ডাটা নিয়ে আসা
+  // 📡 এক্সপ্রেস সার্ভার থেকে টিউটর ডাটা নিয়ে আসা
   useEffect(() => {
     if (authLoading) return;
 
@@ -50,17 +48,32 @@ export default function TutorDetailsPage() {
     fetchTutorDetails();
   }, [id, authLoading]);
 
+  // 🛠️ মোডাল ওপেন করার ফাংশন (ওপেন হওয়ার সময় ইউজারের নাম স্টেট-এ পুশ হবে)
+  const openBookingModal = () => {
+    if (session?.user?.name) {
+      setStudentName(session.user.name);
+    }
+    setIsModalOpen(true);
+  };
+
   // 🛠️ বুকিং সাবমিট হ্যান্ডলার
   const handleBookingSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!session?.user?.email) {
+      alert("Session expired. Please log in again.");
+      return;
+    }
+
     setBookingLoading(true);
 
+    // 🌟 ফিক্স ২: ব্যাকঅ্যান্ডের চাহিদামতো নিখুঁত পেলোড অবজেক্ট তৈরি
     const bookingPayload = {
-      studentName,
-      phone,
+      studentName: studentName || session?.user?.name, // ব্যাকঅ্যান্ড স্টুডেন্ট নেম
+      phone: phone,
       tutorId: id,
       tutorName: tutor.name,
-      studentEmail: session?.user?.email,
+      studentEmail: session.user.email, // 👈 ব্যাকঅ্যান্ডের চাহিদামতো স্টুডেন্ট ইমেইল ভ্যালু
     };
 
     try {
@@ -76,7 +89,7 @@ export default function TutorDetailsPage() {
         alert('🎉 Booking Successful!');
         setIsModalOpen(false);
         setPhone('');
-        // বুকিং শেষে পেজের ডাটা রিলোড করা যাতে আপডেটেড স্লট দেখা যায়
+        // বুকিং শেষে পেজের ডাটা রিলোড করা যাতে আপডেটেড স্লট দেখা যায়
         window.location.reload();
       } else {
         alert(data.error || 'Something went wrong');
@@ -183,7 +196,7 @@ export default function TutorDetailsPage() {
             </div>
           </div>
 
-          {/* কন্ডিশনাল ওয়ার্নিং মেসেজ ডিসপ্লে */}
+          {/* কন্ডিশনাল ওয়ার্নিং মেসেজ ডিসপ্লে */}
           {isSlotEmpty && (
             <div className="mb-6 p-4 bg-rose-50 dark:bg-rose-950/20 text-rose-600 dark:text-rose-400 text-sm font-semibold rounded-2xl border border-rose-100 dark:border-rose-900/30 text-center">
               ⚠️ No available slots left. This session is fully booked. You can’t join at the moment.
@@ -200,7 +213,7 @@ export default function TutorDetailsPage() {
           <div className="text-center pt-4 border-t border-slate-100 dark:border-slate-800">
             <button 
               disabled={isBookingBlocked}
-              onClick={() => setIsModalOpen(true)} 
+              onClick={openBookingModal} 
               className={`w-full sm:w-auto px-8 py-3.5 text-white font-bold rounded-xl shadow-md text-sm transition-all cursor-pointer ${
                 isBookingBlocked 
                   ? 'bg-slate-300 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed shadow-none' 

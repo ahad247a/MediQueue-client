@@ -70,7 +70,7 @@ export default function Navbar() {
               <>
                 <Link href="/add-tutors" className={linkStyle('/add-tutors')}>Add Tutor</Link>
                 <Link href="/my-tutors" className={linkStyle('/my-tutors')}>My Tutors</Link>
-                <Link href="//my-bookings" className={linkStyle('/my-bookings')}>My Booked Sessions</Link>
+                <Link href="/my-bookings" className={linkStyle('/my-bookings')}>My Booked Sessions</Link>
               </>
             )}
           </div>
