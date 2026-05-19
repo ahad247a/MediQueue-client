@@ -68,7 +68,7 @@ export default function Navbar() {
             <Link href="/tutors" className={linkStyle('/tutors')}>Tutors</Link>
             {isLoggedIn && (
               <>
-                <Link href="/tutors/add" className={linkStyle('/tutors/add')}>Add Tutor</Link>
+                <Link href="/add-tutors" className={linkStyle('/add-tutors')}>Add Tutor</Link>
                 <Link href="/dashboard/my-tutors" className={linkStyle('/dashboard/my-tutors')}>My Tutors</Link>
                 <Link href="/dashboard/my-bookings" className={linkStyle('/dashboard/my-bookings')}>My Booked Sessions</Link>
               </>
