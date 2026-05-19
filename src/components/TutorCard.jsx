@@ -14,7 +14,7 @@ export default function TutorCard({ tutor }) {
       className="group relative rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md dark:border-slate-800 dark:bg-slate-900 transition-all duration-300 flex flex-col justify-between"
     >
       <div>
-        {/* টিউটর ইমেজ ও ব্যাজ */}
+     
         <div className="relative h-48 w-full overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-800">
           <Image
             src={tutor.image}
@@ -29,7 +29,7 @@ export default function TutorCard({ tutor }) {
           </span>
         </div>
 
-        {/* টিউটর ইনফো */}
+      
         <div className="mt-4 space-y-2">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
@@ -46,7 +46,7 @@ export default function TutorCard({ tutor }) {
           </p>
         </div>
 
-        {/* অতিরিক্ত ডিটেইলস গ্রিড */}
+      
         <div className="mt-4 grid grid-cols-2 gap-2 border-t border-b border-slate-100 py-3 my-4 dark:border-slate-800 text-xs font-medium text-slate-600 dark:text-slate-400">
           <div className="flex items-center space-x-1.5">
             <FiClock className="text-emerald-500 h-4 w-4" />
@@ -59,14 +59,14 @@ export default function TutorCard({ tutor }) {
         </div>
       </div>
 
-      {/* প্রাইস এবং অ্যাকশন বাটন */}
+      
       <div className="flex items-center justify-between pt-2">
         <div>
           <span className="text-xs text-slate-400 block font-medium">Hourly Rate</span>
           <span className="text-xl font-extrabold text-slate-900 dark:text-white">${tutor.price}</span>
         </div>
         
-        {/* 🌟 ডাইনামিক আইডি চেঞ্জ: tutor.id এর জায়গায় tutor._id || tutor.id ব্যবহার করা হয়েছে */}
+        
         <Link
           href={`/tutors/${tutor._id || tutor.id}`}
           className="inline-flex items-center space-x-1.5 bg-slate-100 hover:bg-emerald-600 dark:bg-slate-800 dark:hover:bg-emerald-500 text-slate-800 dark:text-slate-200 hover:text-white dark:hover:text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 active:scale-95 group/btn"

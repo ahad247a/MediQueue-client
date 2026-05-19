@@ -8,13 +8,13 @@ export default function MyTutorsPage() {
   const [tutors, setTutors] = useState([]);
   const [loading, setLoading] = useState(true);
   
-  // মডাল ও এডিটিং স্টেট
+  
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedTutor, setSelectedTutor] = useState(null);
   const [actionLoading, setActionLoading] = useState(false);
 
-  // এডিট ফর্ম স্টেট
+  
   const [formData, setFormData] = useState({
     name: '', subject: '', hourlyFee: '', totalSlot: '', 
     location: '', sessionDate: '', description: '', image: '', type: ''
@@ -22,7 +22,7 @@ export default function MyTutorsPage() {
 
   const router = useRouter();
   
-  // 🔒 Better-Auth প্রাইভেট রুট প্রোটেকশন
+
   const { data: session, isPending: authLoading } = authClient.useSession();
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export default function MyTutorsPage() {
     }
   }, [session, authLoading, router]);
 
-  // 📡 লগড-ইন ইউজারের ইমেইল অনুযায়ী এক্সপ্রেস সার্ভার থেকে ডাটা লোড করা
+  
   useEffect(() => {
     if (authLoading || !session?.user?.email) return;
 
@@ -52,7 +52,7 @@ export default function MyTutorsPage() {
     fetchMyTutors();
   }, [session, authLoading]);
 
-  // 📝 আপডেট মডাল ওপেন ও ডাটা প্রি-ফিল করা
+
   const openUpdateModal = (tutor) => {
     setSelectedTutor(tutor);
     setFormData({
@@ -69,13 +69,13 @@ export default function MyTutorsPage() {
     setIsUpdateModalOpen(true);
   };
 
-  // 💾 আপডেট সাবমিট হ্যান্ডলার
+
   const handleUpdateSubmit = async (e) => {
     e.preventDefault();
     setActionLoading(true);
 
     try {
-      // 🎯 এখানে PUT এর জায়গায় PATCH করে দেওয়া হয়েছে যেন ব্যাকএন্ডের app.patch এর সাথে মিলে যায়
+  
       const res = await fetch(`http://localhost:5000/api/tutors/${selectedTutor._id}`, {
         method: 'PATCH', 
         headers: { 'Content-Type': 'application/json' },
@@ -83,7 +83,7 @@ export default function MyTutorsPage() {
       });
 
       if (res.ok) {
-        // 🎯 রিলোড ছাড়া সাথে সাথে স্টেট আপডেট করা
+       
         setTutors(prevTutors => 
           prevTutors.map(t => t._id === selectedTutor._id ? { ...t, ...formData } : t)
         );
@@ -100,7 +100,7 @@ export default function MyTutorsPage() {
     }
   };
 
-  // 🗑️ ডিলিট কনফার্মেশন হ্যান্ডলার
+  
   const handleDeleteConfirm = async () => {
     setActionLoading(true);
     try {
@@ -109,7 +109,7 @@ export default function MyTutorsPage() {
       });
 
       if (res.ok) {
-        // 🎯 স্টেট থেকে টিউটরটি ইনস্ট্যান্টলি রিমুভ করা
+     
         setTutors(prevTutors => prevTutors.filter(t => t._id !== selectedTutor._id));
         alert('🗑️ Tutor deleted successfully!');
         setIsDeleteModalOpen(false);
@@ -138,7 +138,7 @@ export default function MyTutorsPage() {
     <div className="min-h-screen bg-slate-50 py-12 px-4 dark:bg-slate-950 transition-colors duration-300">
       <div className="mx-auto max-w-6xl">
         
-        {/* হেডার সেকশন */}
+     
         <div className="mb-12 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h2 className="text-3xl font-black bg-linear-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent dark:from-emerald-400 dark:to-teal-300">
@@ -153,7 +153,7 @@ export default function MyTutorsPage() {
           </Link>
         </div>
 
-        {/* 📋 কন্ডিশনাল রেন্ডারিং: ডাটাবেজ ফাকা থাকলে Friendly Empty State */}
+        
         {tutors.length === 0 ? (
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-12 text-center shadow-sm max-w-md mx-auto">
             <div className="text-4xl mb-4">📭</div>
@@ -166,7 +166,7 @@ export default function MyTutorsPage() {
             </Link>
           </div>
         ) : (
-          /* 📊 রেসপন্সিভ টেবিল লেআউট */
+          
           <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
@@ -183,7 +183,7 @@ export default function MyTutorsPage() {
                   {tutors.map((tutor) => (
                     <tr key={tutor._id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors">
                       <td className="p-5 flex items-center gap-3">
-                        
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img 
                           src={tutor.image || tutor.photo || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde"} 
                           alt={tutor.name} 
@@ -226,7 +226,7 @@ export default function MyTutorsPage() {
         )}
       </div>
 
-      {/* 📝 ১. আপডেট মডাল ফৰ্ম (Update Modal) */}
+     
       {isUpdateModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
           <div className="bg-white dark:bg-slate-900 w-full max-w-lg p-6 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[90vh] overflow-y-auto">
@@ -277,7 +277,7 @@ export default function MyTutorsPage() {
         </div>
       )}
 
-      {/* 🗑️ ২. ডিলিট কনফার্মেশন মডাল (Delete Confirmation Modal) */}
+      
       {isDeleteModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
           <div className="bg-white dark:bg-slate-900 w-full max-w-sm p-6 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 text-center">

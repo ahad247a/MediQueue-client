@@ -13,11 +13,11 @@ export default function Navbar() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
 
-  // Better-Auth লাইভ সেশন
+ 
   const { data: session, isPending } = authClient.useSession();
   const isLoggedIn = !!session?.user;
 
-  // ডার্ক মোড
+ 
   const toggleTheme = () => {
     if (isDark) {
       document.documentElement.classList.remove('dark');
@@ -28,7 +28,7 @@ export default function Navbar() {
     }
   };
 
-  // লগআউট
+  
   const handleLogout = async () => {
     await authClient.signOut({
       fetchOptions: {
@@ -62,7 +62,7 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* ডেস্কটপ লিঙ্ক */}
+          
           <div className="hidden md:flex md:items-center md:space-x-4">
             <Link href="/" className={linkStyle('/')}>Home</Link>
             <Link href="/tutors" className={linkStyle('/tutors')}>Tutors</Link>
@@ -75,7 +75,7 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* রাইট অ্যাকশন */}
+       
           <div className="hidden md:flex md:items-center md:space-x-4">
             <button onClick={toggleTheme} className="rounded-full p-2 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 cursor-pointer">
               {isDark ? <FiSun className="h-5 w-5" /> : <FiMoon className="h-5 w-5" />}
@@ -90,7 +90,7 @@ export default function Navbar() {
                   className="flex items-center justify-center rounded-full border-2 border-emerald-500/50 p-1 bg-slate-100 dark:bg-slate-800 focus:outline-hidden cursor-pointer"
                 >
                   {session.user.image ? (
-                    /* 🌟 এই কমেন্টটি Next.js এর <img> ওয়ার্নিং বন্ধ করে দেবে */
+                    
                     // eslint-disable-next-line @next/next/no-img-element
                     <img 
                       className="h-6 w-6 rounded-full object-cover" 
@@ -127,7 +127,7 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* মোবাইল বাটন */}
+         
           <div className="flex items-center space-x-2 md:hidden">
             <button onClick={toggleTheme} className="rounded-full p-2 text-slate-500 dark:text-slate-400">
               {isDark ? <FiSun className="h-5 w-5" /> : <FiMoon className="h-5 w-5" />}
@@ -140,7 +140,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* মোবাইল মেনু */}
+      
       <AnimatePresence>
         {isOpen && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="bg-white px-4 py-3 dark:bg-slate-900 md:hidden overflow-hidden border-t dark:border-slate-800">
@@ -157,7 +157,7 @@ export default function Navbar() {
                   <div className="border-t border-slate-100 dark:border-slate-800 my-2 pt-2 px-3 flex items-center space-x-3">
                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 border border-emerald-500/30">
                       {session.user.image ? (
-                        /* 🌟 মোবাইল ইমেজের জন্যও ওয়ার্নিং বন্ধ করার কমেন্ট */
+                       
                         // eslint-disable-next-line @next/next/no-img-element
                         <img className="h-8 w-8 rounded-full object-cover" src={session.user.image} alt="User" width={32} height={32} />
                       ) : (

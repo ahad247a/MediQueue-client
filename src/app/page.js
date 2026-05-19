@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react'; // ডেটা লোড করার জন্য হুকস ইমপোর্ট করা হলো
+import { useState, useEffect } from 'react'; 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { FiUsers, FiAward, FiBookOpen, FiCheckCircle, FiArrowRight, FiShield, FiTrendingUp, FiSmile } from 'react-icons/fi';
@@ -7,11 +7,11 @@ import Banner from "@/components/Banner";
 import TutorCard from "@/components/TutorCard";
 
 export default function Home() {
-  // ডাটাবেজের টিউটর ডেটা রাখার জন্য স্টেট
+
   const [featuredTutors, setFeaturedTutors] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 🌟 এক্সপ্রেস ব্যাকএন্ড সার্ভার থেকে ডেটা ফেচ (Fetch) করা
+
   useEffect(() => {
     fetch('http://localhost:5000/featured-tutors')
       .then((res) => res.json())
@@ -28,10 +28,10 @@ export default function Home() {
   return (
     <main className="w-full min-h-screen bg-white dark:bg-slate-950 transition-colors duration-300 space-y-20 pb-20">
       
-      {/* ১. ব্যানার সেকশন */}
+     
       <Banner />
 
-      {/* ২. Available Tutors Section ($limit: 6) */}
+      
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
           <div>
@@ -46,27 +46,27 @@ export default function Home() {
           </Link>
         </div>
 
-        {/* 🌟 ডেটা লোড হওয়ার সময়ের কন্ডিশনাল রেন্ডারিং */}
+      
         {loading ? (
           <div className="text-center py-10 text-slate-500 font-medium">
-            লোডিং হচ্ছে... দয়া করে অপেক্ষা করুন...
+            data loading... please wait...
           </div>
         ) : featuredTutors.length === 0 ? (
           <div className="text-center py-10 text-slate-500 font-medium">
-            ডাটাবেজে কোনো টিউটরের ডেটা পাওয়া যায়নি!
+            there are no tutors available at the moment. please check back later.
           </div>
         ) : (
-          /* কার্ড লেআউট গ্রিড */
+       
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {featuredTutors.map((tutor) => (
-              // মঙ্গোডিবির ইউনিক আইডি _id ব্যবহার করা হয়েছে key হিসেবে
+              
               <TutorCard key={tutor._id || tutor.id} tutor={tutor} />
             ))}
           </div>
         )}
       </section>
 
-      {/* ৩. Extra Section 1: Platform Impact & Statistics */}
+      
       <section className="bg-slate-50 dark:bg-slate-900/40 border-t border-b border-slate-100 dark:border-slate-800/60 py-16 transition-colors duration-300">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-12">
@@ -101,7 +101,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ৪. Extra Section 2: Core Platform Benefits */}
+      
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           

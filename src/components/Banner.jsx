@@ -42,7 +42,7 @@ export default function Banner() {
   const prevSlide = () => setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
 
   return (
-    // মোবাইলে হাইট অটোমেটিক অ্যাডজাস্ট হবে এবং মিনিমাম h-[420px] থাকবে যেন টেক্সট বাইরে না যায়
+    
     <div className="relative w-full min-h-105 h-[calc(100vh-64px)] md:h-137.5 lg:h-150 flex items-center overflow-hidden bg-slate-900">
       
       <AnimatePresence mode="wait">
@@ -55,12 +55,12 @@ export default function Banner() {
           className="absolute inset-0 w-full h-full bg-cover bg-center md:bg-top-right"
           style={{ backgroundImage: `url(${slides[current].image})` }}
         >
-          {/* ওভারলে মোবাইলে একটু বেশি ডার্ক করা হয়েছে (from-slate-950 via-slate-950/85) যেন টেক্সট সহজে পড়া যায় */}
+         
           <div className="absolute inset-0 bg-linear-to-r from-slate-950 via-slate-950/85 sm:via-slate-900/70 to-transparent" />
         </motion.div>
       </AnimatePresence>
 
-      {/* কন্টেন্ট লেয়ার */}
+      
       <div className="relative z-10 mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 text-white py-8 md:py-0">
         <div className="max-w-xl md:max-w-2xl space-y-4 md:space-y-6">
           
@@ -112,7 +112,7 @@ export default function Banner() {
         </div>
       </div>
 
-      {/* ডেস্কটপ নেভিগেশন অ্যারো বাটন */}
+      
       <button
         onClick={prevSlide}
         className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-black/20 hover:bg-black/40 text-white transition-colors duration-200 focus:outline-none backdrop-blur-sm hidden md:block cursor-pointer z-20"
@@ -128,7 +128,7 @@ export default function Banner() {
         <FiChevronRight className="h-6 w-6" />
       </button>
 
-      {/* ইন্ডিকেটর ডটস */}
+      
       <div className="absolute bottom-6 left-1/2 -translate-y-1/2 -translate-x-1/2 flex space-x-2 z-20">
         {slides.map((_, index) => (
           <button

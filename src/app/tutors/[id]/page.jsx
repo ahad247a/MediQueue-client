@@ -9,10 +9,10 @@ export default function TutorDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   
-  // 🔒 Better-Auth সেশন চেক
+ 
   const { data: session, isPending: authLoading } = authClient.useSession();
 
-  // フォーム ইনপুট স্টেট (🌟 ফিক্স ১: সেশন থেকে সরাসরি ইনিশিয়াল ভ্যালু নেওয়া, যা ESLint এরর দূর করবে)
+  
   const [studentName, setStudentName] = useState('');
   const [phone, setPhone] = useState('');
   const [bookingLoading, setBookingLoading] = useState(false);
@@ -20,14 +20,14 @@ export default function TutorDetailsPage() {
   const router = useRouter();
   const { id } = useParams();
 
-  // 🔒 প্রাইভেট রুট প্রোটেকশন চেক (স্টেট সেট করা ছাড়া শুধু রিডাইরেক্ট)
+ 
   useEffect(() => {
     if (!authLoading && !session?.user) {
       router.push('/login');
     }
   }, [session, authLoading, router]);
 
-  // 📡 এক্সপ্রেস সার্ভার থেকে টিউটর ডাটা নিয়ে আসা
+
   useEffect(() => {
     if (authLoading) return;
 
@@ -48,7 +48,7 @@ export default function TutorDetailsPage() {
     fetchTutorDetails();
   }, [id, authLoading]);
 
-  // 🛠️ মোডাল ওপেন করার ফাংশন (ওপেন হওয়ার সময় ইউজারের নাম স্টেট-এ পুশ হবে)
+  
   const openBookingModal = () => {
     if (session?.user?.name) {
       setStudentName(session.user.name);
@@ -56,7 +56,7 @@ export default function TutorDetailsPage() {
     setIsModalOpen(true);
   };
 
-  // 🛠️ বুকিং সাবমিট হ্যান্ডলার
+  
   const handleBookingSubmit = async (e) => {
     e.preventDefault();
     
@@ -67,13 +67,13 @@ export default function TutorDetailsPage() {
 
     setBookingLoading(true);
 
-    // 🌟 ফিক্স ২: ব্যাকঅ্যান্ডের চাহিদামতো নিখুঁত পেলোড অবজেক্ট তৈরি
+
     const bookingPayload = {
-      studentName: studentName || session?.user?.name, // ব্যাকঅ্যান্ড স্টুডেন্ট নেম
+      studentName: studentName || session?.user?.name, 
       phone: phone,
       tutorId: id,
       tutorName: tutor.name,
-      studentEmail: session.user.email, // 👈 ব্যাকঅ্যান্ডের চাহিদামতো স্টুডেন্ট ইমেইল ভ্যালু
+      studentEmail: session.user.email, 
     };
 
     try {
@@ -89,7 +89,6 @@ export default function TutorDetailsPage() {
         alert('🎉 Booking Successful!');
         setIsModalOpen(false);
         setPhone('');
-        // বুকিং শেষে পেজের ডাটা রিলোড করা যাতে আপডেটেড স্লট দেখা যায়
         window.location.reload();
       } else {
         alert(data.error || 'Something went wrong');
@@ -126,7 +125,7 @@ export default function TutorDetailsPage() {
     );
   }
 
-  // 🔴 রিকোয়ারমেন্ট কন্ডিশন চেক
+  
   const totalSlot = tutor.totalSlot || tutor.slots || 0;
   const isSlotEmpty = totalSlot <= 0;
   
@@ -134,14 +133,14 @@ export default function TutorDetailsPage() {
   const sessionDate = tutor.sessionDate ? new Date(tutor.sessionDate) : null;
   const isDateEarly = sessionDate ? currentDate < sessionDate : false;
 
-  // বাটন ডিসেবল করার লজিক
+
   const isBookingBlocked = isSlotEmpty || isDateEarly;
 
   return (
     <div className="min-h-screen bg-slate-50 py-12 px-4 dark:bg-slate-950 transition-colors duration-300">
       <div className="mx-auto max-w-4xl bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden">
         
-        {/* ইমেজ সেকশন */}
+    
         <div className="relative h-64 sm:h-80 w-full bg-slate-100 dark:bg-slate-800">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img 
@@ -154,7 +153,7 @@ export default function TutorDetailsPage() {
           </Link>
         </div>
 
-        {/* বডি ডিটেইলস */}
+       
         <div className="p-6 sm:p-10">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-slate-100 dark:border-slate-800 pb-6">
             <div>
@@ -177,7 +176,7 @@ export default function TutorDetailsPage() {
             </div>
           </div>
 
-          {/* ইনফরমেশন গ্রিড */}
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
             <div className="space-y-3">
               <h3 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Tutor Profile</h3>
@@ -196,7 +195,7 @@ export default function TutorDetailsPage() {
             </div>
           </div>
 
-          {/* কন্ডিশনাল ওয়ার্নিং মেসেজ ডিসপ্লে */}
+          
           {isSlotEmpty && (
             <div className="mb-6 p-4 bg-rose-50 dark:bg-rose-950/20 text-rose-600 dark:text-rose-400 text-sm font-semibold rounded-2xl border border-rose-100 dark:border-rose-900/30 text-center">
               ⚠️ No available slots left. This session is fully booked. You can’t join at the moment.
@@ -209,7 +208,7 @@ export default function TutorDetailsPage() {
             </div>
           )}
 
-          {/* বুকিং অ্যাকশন বাটন */}
+        
           <div className="text-center pt-4 border-t border-slate-100 dark:border-slate-800">
             <button 
               disabled={isBookingBlocked}
@@ -226,7 +225,7 @@ export default function TutorDetailsPage() {
         </div>
       </div>
 
-      {/* 📥 🎯 বুক সেশন পপআপ মোডাল (Modal Form) */}
+      
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-fadeIn">
           <div className="bg-white dark:bg-slate-900 w-full max-w-md p-6 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 transform transition-all scale-100">
@@ -239,7 +238,7 @@ export default function TutorDetailsPage() {
             </div>
 
             <form onSubmit={handleBookingSubmit} className="space-y-4 mt-4">
-              {/* স্টুডেন্ট নাম ইনপুট */}
+              
               <div>
                 <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Student Name</label>
                 <input 
@@ -251,7 +250,6 @@ export default function TutorDetailsPage() {
                 />
               </div>
 
-              {/* ফোন নাম্বার ইনপুট */}
               <div>
                 <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Phone Number</label>
                 <input 
@@ -264,7 +262,7 @@ export default function TutorDetailsPage() {
                 />
               </div>
 
-              {/* টিউটর আইডি (Auto-filled & Read Only) */}
+              
               <div>
                 <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Tutor ID (Auto)</label>
                 <input 
@@ -275,7 +273,7 @@ export default function TutorDetailsPage() {
                 />
               </div>
 
-              {/* টিউটর নাম (Auto-filled & Read Only) */}
+
               <div>
                 <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Tutor Name (Auto)</label>
                 <input 
@@ -286,7 +284,7 @@ export default function TutorDetailsPage() {
                 />
               </div>
 
-              {/* স্টুডেন্ট ইমেইল (Auto-filled & Read Only) */}
+
               <div>
                 <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Student Email (Auto)</label>
                 <input 
@@ -297,7 +295,7 @@ export default function TutorDetailsPage() {
                 />
               </div>
 
-              {/* সাবমিট বাটন */}
+             
               <button 
                 type="submit" 
                 disabled={bookingLoading}

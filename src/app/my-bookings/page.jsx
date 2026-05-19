@@ -3,19 +3,17 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { authClient } from "@/lib/auth-client";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function MyBookedSessionsPage() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
-  
-  // ক্যানসেল মডাল ও অ্যাকশন স্টেট
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [selectedBookingId, setSelectedBookingId] = useState(null);
   const [actionLoading, setActionLoading] = useState(false);
 
   const router = useRouter();
-  
-  // 🔒 Better-Auth প্রাইভেট রুট প্রোটেকশন
   const { data: session, isPending: authLoading } = authClient.useSession();
 
   useEffect(() => {
@@ -24,21 +22,21 @@ export default function MyBookedSessionsPage() {
     }
   }, [session, authLoading, router]);
 
-  // 📡 লগড-ইন ইউজারের ইমেইল অনুযায়ী বুকড সেশন ডেটা ফেচ করা
   useEffect(() => {
-    // সেশন ও ইমেইল পুরোপুরি লোড না হওয়া পর্যন্ত ব্যাকএন্ডে রিকোয়েস্ট পাঠাবে না
     if (authLoading || !session?.user?.email) return;
 
     const fetchMyBookings = async () => {
       try {
-        // 🌟 ফিক্স: '/api/my-bookings' পরিবর্তন করে সঠিক ব্যাকএন্ড রাউট '/api/bookings' করা হয়েছে
         const res = await fetch(`http://localhost:5000/api/bookings?email=${session.user.email}`);
         if (res.ok) {
           const data = await res.json();
           setBookings(data);
+        } else {
+          toast.error("Failed to load your bookings from the server.");
         }
       } catch (error) {
         console.error("Failed to fetch bookings:", error);
+        toast.error("Network error! Could not connect to the server.");
       } finally {
         setLoading(false);
       }
@@ -47,7 +45,6 @@ export default function MyBookedSessionsPage() {
     fetchMyBookings();
   }, [session, authLoading]);
 
-  // 🚫 ক্যানসেল কনফার্মেশন সাবমিট হ্যান্ডলার (PATCH Request)
   const handleCancelConfirm = async () => {
     if (!selectedBookingId) return;
     setActionLoading(true);
@@ -59,17 +56,17 @@ export default function MyBookedSessionsPage() {
       });
 
       if (res.ok) {
-        // 🎯 পেজ রিলোড ছাড়া সাথে সাথে UI-তে স্ট্যাটাস "cancelled" আপডেট করা
         setBookings(prevBookings =>
           prevBookings.map(b => b._id === selectedBookingId ? { ...b, bookStatus: 'cancelled' } : b)
         );
-        alert('🚫 Session booking cancelled successfully.');
+        toast.success('Session booking cancelled successfully!');
         setIsCancelModalOpen(false);
       } else {
-        alert('Failed to cancel the booking.');
+        toast.error('Failed to cancel the booking. Please try again.');
       }
     } catch (error) {
       console.error("Cancellation error:", error);
+      toast.error('Something went wrong. Please check your connection.');
     } finally {
       setActionLoading(false);
       setSelectedBookingId(null);
@@ -80,8 +77,13 @@ export default function MyBookedSessionsPage() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-slate-50 dark:bg-slate-950">
         <div className="text-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent mx-auto"></div>
-          <p className="mt-4 text-slate-500 dark:text-slate-400 font-medium">Loading your booked sessions...</p>
+          <div className="relative h-12 w-12 mx-auto">
+            <div className="absolute inset-0 rounded-full border-4 border-slate-200 dark:border-slate-800"></div>
+            <div className="absolute inset-0 rounded-full border-4 border-emerald-500 border-t-transparent animate-spin"></div>
+          </div>
+          <p className="mt-4 text-sm text-slate-500 dark:text-slate-400 font-medium tracking-wide">
+            Loading your booked sessions...
+          </p>
         </div>
       </div>
     );
@@ -89,9 +91,9 @@ export default function MyBookedSessionsPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 py-12 px-4 dark:bg-slate-950 transition-colors duration-300">
+      <ToastContainer position="top-right" autoClose={3000} />
+
       <div className="mx-auto max-w-6xl">
-        
-        {/* হেডার সেকশন */}
         <div className="mb-12">
           <h2 className="text-3xl font-black bg-linear-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent dark:from-emerald-400 dark:to-teal-300">
             My Booked Sessions
@@ -101,20 +103,18 @@ export default function MyBookedSessionsPage() {
           </p>
         </div>
 
-        {/* 📭 কন্ডিশনাল রেন্ডারিং: কোনো বুকিং না থাকলে Friendly Empty State */}
         {bookings.length === 0 ? (
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-12 text-center shadow-sm max-w-md mx-auto">
             <div className="text-4xl mb-4">🗓️</div>
             <p className="text-slate-700 dark:text-slate-300 font-bold text-xl">No Bookings Found!</p>
             <p className="text-xs text-slate-400 mt-2 mb-6 leading-relaxed">
-              আপনি এখনো কোনো টিউটরের সেশন বুক করেননি। নতুন সেশন খুঁজে বুক করতে আমাদের টিউটর লিস্ট ঘুরে আসুন।
+              You have not booked any tutoring sessions yet. Browse our tutor list to find and book your preferred sessions.
             </p>
             <Link href="/tutors" className="rounded-xl bg-linear-to-r from-emerald-600 to-teal-500 px-5 py-2.5 text-xs font-bold text-white shadow-md hover:opacity-95 transition-all">
               Find Tutors
             </Link>
           </div>
         ) : (
-          /* 📊 বুকিং টেবিল লেআউট */
           <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
@@ -166,9 +166,8 @@ export default function MyBookedSessionsPage() {
         )}
       </div>
 
-      {/* ⚠️ ক্যানসেল কনফার্মেশন মডাল (Cancel Confirmation Modal) */}
       {isCancelModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
           <div className="bg-white dark:bg-slate-900 w-full max-w-sm p-6 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 text-center">
             <div className="text-rose-500 text-4xl mb-2">⚠️</div>
             <h3 className="text-lg font-black text-slate-800 dark:text-slate-100">Cancel this session?</h3>
@@ -186,13 +185,17 @@ export default function MyBookedSessionsPage() {
                 disabled={actionLoading} 
                 className="px-5 py-2 bg-rose-600 text-white font-bold text-xs rounded-xl hover:bg-rose-500 cursor-pointer disabled:opacity-50"
               >
-                {actionLoading ? 'Processing...' : 'Yes, Cancel'}
+                {actionLoading ? (
+                  <div className="flex items-center gap-2">
+                    <div className="h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                    <span>Cancelling...</span>
+                  </div>
+                ) : 'Yes, Cancel'}
               </button>
             </div>
           </div>
         </div>
       )}
-
     </div>
   );
 }

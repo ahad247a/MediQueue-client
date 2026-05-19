@@ -9,10 +9,10 @@ export default function Footer() {
     <footer className="w-full border-t border-slate-200 bg-slate-50 text-slate-600 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-400 transition-colors duration-300">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         
-        {/* মেইন গ্রিড লেআউট */}
+        
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           
-          {/* ১. লোগো এবং সংক্ষিপ্ত বিবরণ */}
+          
           <div className="space-y-4">
             <Link href="/" className="flex items-center space-x-2">
               <span className="bg-linear-to-r from-emerald-600 to-teal-500 bg-clip-text text-xl font-extrabold tracking-tight text-transparent dark:from-emerald-400 dark:to-teal-300">
@@ -24,7 +24,7 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* ২. লার্নিং সার্ভিসেস লিংক (Tutor/Learning Services Links) */}
+          
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-slate-200">
               Learning Services
@@ -53,7 +53,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* ৩. কন্টাক্ট ইনফরমেশন (Contact Information) */}
+          
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-slate-200">
               Contact Us
@@ -74,7 +74,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* ৪. সোশ্যাল লিংক (Social Links) */}
+         
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-slate-200">
               Follow Us
@@ -98,7 +98,7 @@ export default function Footer() {
 
         </div>
 
-        {/* ৫. কপিরাইট ইনফরমেশন (Copyright Information) */}
+        
         <div className="mt-12 border-t border-slate-200 pt-6 text-center dark:border-slate-800">
           <p className="text-xs text-slate-500 dark:text-slate-500">
             &copy; {currentYear} MediQueue. All rights reserved. Designed for excellence.

@@ -6,11 +6,11 @@ export default function TutorsPage() {
   const [tutors, setTutors] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 🌟 আপনার এক্সটার্নাল Express.js সার্ভার থেকে রিয়েল ডাটা লোড করা
+ 
   useEffect(() => {
     const fetchTutors = async () => {
       try {
-        // এখানে পোর্টের সংখ্যা আপনার এক্সপ্রেস সার্ভার পোর্টের (যেমন: 5000) সাথে মিলিয়ে নিবেন
+       
         const res = await fetch('http://localhost:5000/api/tutors');
         if (res.ok) {
           const data = await res.json();
@@ -41,7 +41,7 @@ export default function TutorsPage() {
     <div className="min-h-screen bg-slate-50 py-12 px-4 dark:bg-slate-950 transition-colors duration-300">
       <div className="mx-auto max-w-6xl">
         
-        {/* হেডার সেকশন */}
+       
         <div className="mb-12 text-center">
           <h2 className="text-4xl font-extrabold tracking-tight bg-linear-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent dark:from-emerald-400 dark:to-teal-300">
             Available Tutors
@@ -51,7 +51,7 @@ export default function TutorsPage() {
           </p>
         </div>
 
-        {/* ডাটাবেজ ফাঁকা থাকলে */}
+   
         {tutors.length === 0 ? (
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-12 text-center shadow-sm max-w-md mx-auto">
             <p className="text-slate-600 dark:text-slate-400 font-medium text-lg">No Tutors Found!</p>
@@ -61,7 +61,7 @@ export default function TutorsPage() {
             </Link>
           </div>
         ) : (
-          /* 🎯 রিকোয়ারমেন্ট অনুসারে ৩-কলাম গ্রিড লেআউট (md:grid-cols-2 lg:grid-cols-3) */
+          
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
             {tutors.map((tutor) => (
               <div 
@@ -69,7 +69,7 @@ export default function TutorsPage() {
                 className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900"
               >
                 <div>
-                  {/* ইমেজ সেকশন */}
+                  
                   <div className="relative h-52 w-full overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-800 mb-4">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img 
@@ -77,7 +77,7 @@ export default function TutorsPage() {
                       alt={tutor.name}
                       className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
-                    {/* টিচিং মোড/টাইপ */}
+                    
                     {tutor.type && (
                       <span className="absolute top-3 right-3 rounded-lg bg-slate-900/80 backdrop-blur-sm px-2.5 py-1 text-xs font-semibold text-white">
                         {tutor.type}
@@ -85,7 +85,7 @@ export default function TutorsPage() {
                     )}
                   </div>
 
-                  {/* সাবজেক্ট এবং স্লট */}
+                  
                   <div className="flex items-center justify-between mb-1.5">
                     <span className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
                       {tutor.subject || "General"}
@@ -95,24 +95,24 @@ export default function TutorsPage() {
                     </span>
                   </div>
                   
-                  {/* টিউটরের নাম */}
+                 
                   <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 truncate">
                     {tutor.name}
                   </h3>
                   
-                  {/* কন্টাক্ট ইমেইল */}
+                  
                   <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-1 mt-1">
                     📧 {tutor.email || "No Email Provided"}
                   </p>
                   
-                  {/* লোকেশন */}
+                  
                   {tutor.location && (
                     <p className="text-xs text-slate-400 dark:text-slate-500 line-clamp-1 mt-1">
                       📍 {tutor.location}
                     </p>
                   )}
 
-                  {/* ডেসক্রিপশন */}
+                 
                   {tutor.description && (
                     <p className="text-xs text-slate-400 dark:text-slate-500 mt-3 line-clamp-2 bg-slate-50 dark:bg-slate-800/30 p-2.5 rounded-xl italic">
                       {tutor.description}
@@ -120,7 +120,7 @@ export default function TutorsPage() {
                   )}
                 </div>
 
-                {/* ফি এবং বুক সেশন বাটন */}
+                
                 <div className="mt-6 border-t border-slate-100 pt-4 dark:border-slate-800/80 flex items-center justify-between">
                   <div>
                     <span className="text-xs text-slate-400 block">Salary / Fee</span>
@@ -129,7 +129,7 @@ export default function TutorsPage() {
                     </p>
                   </div>
                   
-                  {/* 🎯 রিকোয়ারমেন্ট অনুসারে "Book Session" বাটন */}
+                 
                   <Link 
                     href={`/tutors/${tutor._id}`}
                     className="rounded-xl bg-linear-to-r from-emerald-600 to-teal-500 px-4 py-2.5 text-xs font-bold text-white shadow-sm hover:opacity-95 transition-all"
