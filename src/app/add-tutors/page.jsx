@@ -9,7 +9,7 @@ export default function AddTutorsPage() {
   // 🌟 Better-Auth এর মাধ্যমে সেশন ও লোডিং স্টেট চেক (Private Route Protection)
   const { data: session, isPending } = authClient.useSession();
   
-  // অ্যাসাইনমেন্টের রিকোয়ারমেন্ট অনুযায়ী সব ফর্ম ফিল্ড স্টেট
+  // অ্যাসাইনমেন্টের রিকোয়ারমেন্ট অনুযায়ী সব ফর্ম ফিল্ড স্টেট
   const [formData, setFormData] = useState({
     name: '',
     photo: '', // imgbb-link/postimage upload
@@ -35,7 +35,7 @@ export default function AddTutorsPage() {
     }
   }, [session, isPending, router]);
 
-  // সেশন চেক করার সময় সুন্দর একটি লোডিং দেখাবে
+  // সেশন চেক করার সময় সুন্দর একটি লোডিং দেখাবে
   if (isPending) {
     return (
       <div className="flex min-h-[70vh] items-center justify-center bg-slate-50 dark:bg-slate-950">
@@ -59,17 +59,25 @@ export default function AddTutorsPage() {
     setMessage({ type: '', text: '' });
 
     try {
-      // 🌟 ব্যাকএন্ড API-তে ডেটা পাঠানো হচ্ছে
-      const res = await fetch('/api/tutors', {
+      // 🌟 ব্যাকএন্ডে পাঠানোর আগে ডেটা টাইপ ঠিক করা এবং ইউজারের ইমেইল যোগ করা
+      const submissionData = {
+        ...formData,
+        tutorEmail: session?.user?.email, // কোন ইউজার টিউটর অ্যাড করছে তা ট্র্যাক করার জন্য
+        hourlyFee: Number(formData.hourlyFee), // String থেকে Number-এ কনভার্ট (MongoDB $inc এর জন্য আবশ্যক)
+        totalSlot: Number(formData.totalSlot), // String থেকে Number-এ কনভার্ট
+      };
+
+      // 🌟 ব্যাকএন্ড POST API-তে ডেটা পাঠানো হচ্ছে
+      const res = await fetch('http://localhost:5000/api/my-tutors', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(submissionData),
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        // ক্লিক করার পর সাকসেস মেসেজ শো করা (What Happens Next শর্তানুযায়ী)
+        // ক্লিক করার পর সাকসেস মেসেজ শো করা
         setMessage({ 
           type: 'success', 
           text: '🎉 Success! Tutor details along with your user information have been successfully stored into the database.' 
@@ -82,7 +90,7 @@ export default function AddTutorsPage() {
           institution: '', experience: '', location: '', teachingMode: 'Online'
         });
 
-        // সফল হওয়ার ২.৫ সেকেন্ড পর ইউজারকে টিউটর লিস্ট বা ড্যাশবোর্ডে রিডাইরেক্ট করা
+        // সফল হওয়ার ২.৫ সেকেন্ড পর ইউজারকে টিউটর লিস্ট পেজে রিডাইরেক্ট করা
         setTimeout(() => router.push("/tutors"), 2500);
       } else {
         setMessage({ type: 'error', text: data.error || 'Something went wrong!' });
@@ -170,7 +178,7 @@ export default function AddTutorsPage() {
               <input type="number" name="totalSlot" required value={formData.totalSlot} onChange={handleChange} placeholder="e.g. 5" className="w-full rounded-xl border border-slate-200 p-3 text-sm focus:border-emerald-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white" />
             </div>
 
-            {/* Session Start Date (Date Picker) */}
+            {/* Session Start Date */}
             <div>
               <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Session Start Date *</label>
               <input type="date" name="startDate" required value={formData.startDate} onChange={handleChange} className="w-full rounded-xl border border-slate-200 p-3 text-sm focus:border-emerald-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white cursor-pointer" />

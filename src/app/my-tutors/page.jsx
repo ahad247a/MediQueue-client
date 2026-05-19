@@ -31,13 +31,12 @@ export default function MyTutorsPage() {
     }
   }, [session, authLoading, router]);
 
-  // 📡 লগড-ইন ইউজারের ইমেইল অনুযায়ী এক্সপ্রেস সার্ভার থেকে ডাটা লোড করা
+  // 📡 লগড-ইন ইউজারের ইমেইল অনুযায়ী এক্সপ্রেস সার্ভার থেকে ডাটা লোড করা
   useEffect(() => {
     if (authLoading || !session?.user?.email) return;
 
     const fetchMyTutors = async () => {
       try {
-        // 💡 আপনার এক্সপ্রেস ব্যাকএন্ডে আমরা একটি নতুন কুয়েরি ফিল্টার রুট ব্যবহার করব
         const res = await fetch(`http://localhost:5000/api/my-tutors?email=${session.user.email}`);
         if (res.ok) {
           const data = await res.json();
@@ -62,7 +61,7 @@ export default function MyTutorsPage() {
       hourlyFee: tutor.hourlyFee || tutor.price || tutor.salary || 0,
       totalSlot: tutor.totalSlot || tutor.slots || 0,
       location: tutor.location || '',
-      sessionDate: tutor.sessionDate ? tutor.sessionDate.split('T')[0] : '', // HTML date input এর ফরম্যাট ঠিক রাখার জন্য
+      sessionDate: tutor.sessionDate ? tutor.sessionDate.split('T')[0] : '', 
       description: tutor.description || '',
       image: tutor.image || tutor.photo || '',
       type: tutor.type || ''
@@ -70,22 +69,21 @@ export default function MyTutorsPage() {
     setIsUpdateModalOpen(true);
   };
 
-  // 💾 আপডেট সাবমিট হ্যান্ডলার (পেজ রিলোড ছাড়া রিফ্লেক্ট হবে)
+  // 💾 আপডেট সাবমিট হ্যান্ডলার
   const handleUpdateSubmit = async (e) => {
     e.preventDefault();
     setActionLoading(true);
 
     try {
+      // 🎯 এখানে PUT এর জায়গায় PATCH করে দেওয়া হয়েছে যেন ব্যাকএন্ডের app.patch এর সাথে মিলে যায়
       const res = await fetch(`http://localhost:5000/api/tutors/${selectedTutor._id}`, {
-        method: 'PUT',
+        method: 'PATCH', 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       });
 
       if (res.ok) {
-        const updatedData = await res.json();
-        
-        // 🎯 রিলোড ছাড়া সাথে সাথে স্টেট আপডেট করা
+        // 🎯 রিলোড ছাড়া সাথে সাথে স্টেট আপডেট করা
         setTutors(prevTutors => 
           prevTutors.map(t => t._id === selectedTutor._id ? { ...t, ...formData } : t)
         );
@@ -111,7 +109,7 @@ export default function MyTutorsPage() {
       });
 
       if (res.ok) {
-        // 🎯 রিলোড ছাড়া স্টেট থেকে টিউটরটি ইনস্ট্যান্টলি রিমুভ করা
+        // 🎯 স্টেট থেকে টিউটরটি ইনস্ট্যান্টলি রিমুভ করা
         setTutors(prevTutors => prevTutors.filter(t => t._id !== selectedTutor._id));
         alert('🗑️ Tutor deleted successfully!');
         setIsDeleteModalOpen(false);
@@ -185,7 +183,7 @@ export default function MyTutorsPage() {
                   {tutors.map((tutor) => (
                     <tr key={tutor._id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors">
                       <td className="p-5 flex items-center gap-3">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        
                         <img 
                           src={tutor.image || tutor.photo || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde"} 
                           alt={tutor.name} 
