@@ -33,7 +33,7 @@ export default function TutorDetailsPage() {
 
     const fetchTutorDetails = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/tutors/${id}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/tutors/${id}`);
         if (res.ok) {
           const data = await res.json();
           setTutor(data);
@@ -77,7 +77,7 @@ export default function TutorDetailsPage() {
     };
 
     try {
-      const res = await fetch('http://localhost:5000/api/bookings', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/bookings`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(bookingPayload),

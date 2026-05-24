@@ -59,7 +59,7 @@ export default function AddTutorsPage() {
         totalSlot: Number(formData.totalSlot), 
       };
 
-      const res = await fetch('http://localhost:5000/api/my-tutors', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/my-tutors`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(submissionData),

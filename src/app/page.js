@@ -13,7 +13,7 @@ export default function Home() {
 
 
   useEffect(() => {
-    fetch('http://localhost:5000/featured-tutors')
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/featured-tutors`)
       .then((res) => res.json())
       .then((data) => {
         setFeaturedTutors(data);

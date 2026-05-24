@@ -6,7 +6,7 @@ import { mongodbAdapter } from "better-auth/adapters/mongodb";
 
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
-const dbUri = process.env.MONGODB_URI || "mongodb+srv://MediQueue:7RCEYV0gdmdPHAJK@cluster0.tvp63og.mongodb.net/?appName=Cluster0";
+const dbUri = process.env.MONGODB_URI ;
 const client = new MongoClient(dbUri);
 const db = client.db("mediQueueDB");
 

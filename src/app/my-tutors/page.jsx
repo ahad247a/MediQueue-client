@@ -37,7 +37,7 @@ export default function MyTutorsPage() {
 
     const fetchMyTutors = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/my-tutors?email=${session.user.email}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/my-tutors?email=${session.user.email}`);
         if (res.ok) {
           const data = await res.json();
           setTutors(data);
@@ -76,7 +76,7 @@ export default function MyTutorsPage() {
 
     try {
   
-      const res = await fetch(`http://localhost:5000/api/tutors/${selectedTutor._id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/tutors/${selectedTutor._id}`, {
         method: 'PATCH', 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
@@ -104,7 +104,7 @@ export default function MyTutorsPage() {
   const handleDeleteConfirm = async () => {
     setActionLoading(true);
     try {
-      const res = await fetch(`http://localhost:5000/api/tutors/${selectedTutor._id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/tutors/${selectedTutor._id}`, {
         method: 'DELETE'
       });
 

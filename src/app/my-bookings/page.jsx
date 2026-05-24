@@ -27,7 +27,7 @@ export default function MyBookedSessionsPage() {
 
     const fetchMyBookings = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/bookings?email=${session.user.email}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/bookings?email=${session.user.email}`);
         if (res.ok) {
           const data = await res.json();
           setBookings(data);
@@ -50,7 +50,7 @@ export default function MyBookedSessionsPage() {
     setActionLoading(true);
 
     try {
-      const res = await fetch(`http://localhost:5000/api/bookings/cancel/${selectedBookingId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/bookings/cancel/${selectedBookingId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' }
       });
